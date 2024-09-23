@@ -1,49 +1,47 @@
 #include "gyroscope.h"
 
-  float anglez = 0, offset1 = 0, offset2 = 0, offset3 = 0.0f,   lasttime = 0, dt;
-float area = 0;
-
-Adafruit_MPU6050 mpu;
-sensors_event_t a, g, temp;
+// Variable to store the gyro offset
+float offset3 = 0;
 
 void initgyro() {
-  // تهيئة MPU6050
-  mpu.begin();
-  mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
-  mpu.setGyroRange(MPU6050_RANGE_500_DEG);
-  mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);
+    // Initialize MPU6050
+    if (!mpu.begin()) {
+        Serial.println("Failed to find MPU6050 chip");
+        while (1) {
+            delay(10); // Wait indefinitely if the MPU6050 is not found
+        }
+    }
+    Serial.println("MPU6050 Found!");
 
-  while (!mpu.begin()) {
-    Serial.println("Failed to find MPU6050 chip");
-    delay(10);
-  }
-  Serial.println("MPU6050 Found!");
+    // Configure MPU6050 settings
+    mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
+    mpu.setGyroRange(MPU6050_RANGE_500_DEG);
+    mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);
 
-  // Calibration (معايرة الجايروسكوب)
-  for (int i = 0; i < 200; i++) {
-    mpu.getEvent(&a, &g, &temp);
-   // offset1 += g.gyro.x;
-   // offset2 += g.gyro.y;
-    offset3 += g.gyro.z;
-  }
- // offset1 /= 200.0;
- // offset2 /= 200.0;
-  offset3 /= 200.0;
+    // Calculate gyro offset
+    for (int i = 0; i < 200; i++) {
+        mpu.getEvent(&a, &g, &temp);
+        offset3 += g.gyro.z; // Accumulate gyro z-axis readings
+    }
+    offset3 /= 200.0; // Average the readings
 }
 
 void readgyro() {
-  float time = millis();
-  dt = (time - lasttime) / 1000.0;  // احسب الزمن المنقضي بالثواني
-  
-  mpu.getEvent(&a, &g, &temp);
-  area = (g.gyro.z - offset3) * dt * 180 / M_PI;  // حساب التغيير في الزاوية
-  
-  if (fabs(area) > 0.04) {
-    anglez += area;
-  }
-  
-  lasttime = time;
+    float time = millis();
+    float dt = (time - lasttime) / 1000.0; // Time interval in seconds
 
-  Serial.print("anglez = ");
-  Serial.println(anglez);
+    // Get sensor readings
+    mpu.getEvent(&a, &g, &temp);
+
+    // Calculate the change in angle
+    float area = (g.gyro.z - offset3) * dt * 180 / M_PI;
+    if (fabs(area) > 0.007) {
+        anglez += area; // Update angle if the change is significant
+    }
+
+    lasttime = time; // Update the last time for the next reading
+
+    // Print the current angle for debugging
+    //Serial.print("anglez = ");
+    //Serial.println(anglez);
 }

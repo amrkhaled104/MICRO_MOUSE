@@ -1,13 +1,22 @@
 #include "walls.h"
 
 bool wallFront() {
-  return (digitalRead(FRONT_SENSOR_PIN) == LOW); // إذا كان هناك جدار أمامي
+    bool frontDetected = (digitalRead(FRONT_SENSOR_PIN) == LOW); // Check for wall in front
+    Serial.print("wallFront: ");
+    Serial.println(frontDetected);
+    return frontDetected;
 }
 
 bool wallRight() {
-  return (digitalRead(RIGHT_SENSOR_PIN) == LOW); // إذا كان هناك جدار يمين
+    bool rightDetected = (digitalRead(RIGHT_SENSOR_PIN) == LOW); // Check for wall on the right
+    Serial.print("wallRight: ");
+    Serial.println(rightDetected);
+    return rightDetected;
 }
 
 bool wallLeft() {
-  return (digitalRead(LEFT_SENSOR_PIN) == LOW); // إذا كان هناك جدار يسار
+    bool leftDetected = (digitalRead(LEFT_SENSOR_PIN) == LOW); // Check for wall on the left
+    Serial.print("wallLeft: ");
+    Serial.println(leftDetected);
+    return leftDetected;
 }
