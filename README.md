@@ -60,6 +60,11 @@ Measures angles and helps maintain orientation for accurate navigation.
 
 The Micromouse project wasn't without its fair share of difficulties, and we encountered numerous challenges along the way. Here's a glimpse into what we went through:
 
+## Simulation Video 🎥
+Check out this video demonstrating the performance of our algorithm in action on the simulation software! This video showcases how the robot navigates the maze and makes real-time decisions. 
+
+[![Watch the Simulation](https://github.com/amrkhaled104/MICRO_MOUSE/blob/main/algorithm/Untitled%20video%20-%20Made%20with%20Clipchamp.mp4)
+
 ### PCB Design and Hardware Availability
 
 At the beginning of the project, we designed everything based on the assumption that we would handle all components on the PCB, expecting it to be the ultimate hardware solution. We calculated everything meticulously, but unfortunately, hardware availability in Egypt turned out to be less than ideal. The quality of some components was subpar, which forced us to adapt and compromise in certain areas.
